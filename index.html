@@ -6,31 +6,76 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Index</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
 </head>
 <body>
-<div>
-    <input type="text" name="keyword" placeholder="keyword..."> <button type="button" id="btn-search">Search</button>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="#">Action</a>
+                    <a class="dropdown-item" href="#">Another action</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Something else here</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            </li>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+
+            <input class="form-control mr-sm-2" type="search" name="keyword" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="button" id="btn-search">Search</button>
+        </form>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="filter mt-5">
+                <select name="status" class="form-control w-25">
+                    <option value="ALL">Tất cả</option>
+                    <option value="ACTIVE">Đã kích hoạt</option>
+                    <option value="INACTIVE">Chưa kích hoạt</option>
+                </select>
+            </div>
+            <table class="table mt-2">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Salary</th>
+                    <th scope="col">DOB</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+                <tbody id="persons">
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-
-<div style="color: #c75959">List id</div>
-<ul id="persons">
-
-</ul>
-
-<div style="color: #c75959">Find by id: 1</div>
-<div id="findById"></div>
-
-<form action="#">
-    <label>Name</label>
-    <input type="text" name="name">
-    <br>
-    <label>Age</label>
-    <input type="number" name="age">
-    <br>
-    <label></label>
-</form>
-
+<script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="app/index.ts"></script>
 </body>
 </html>

@@ -6,16 +6,15 @@ import {Success} from "../domain/rest/Success";
 
 export class PersonRepository implements ICrudRepository<Person, number> {
 
-    findAll(keyword?: string, page?: number, limit?: number): Person[] {
+    findAll(keyword?: string, status?: string, page?: number, limit?: number): Person[] {
         let res: Success = null;
         let persons: Person[] = null;
 
         if (page == null) page = 1;
         if (limit == null) limit = 10;
-        let url = ENDPOINT.person.list + `?page=${page}&limit=${limit}${keyword == null ? '' : `&keyword=${keyword}`}`;
 
         $.ajax({
-            url: url,
+            url: ENDPOINT.person.list + `?page=${page}&limit=${limit}${keyword == null ? '' : `&keyword=${keyword}`}${status == null ? '' : `&status=${status}`}`,
             method: 'GET',
             contentType: 'application/json',
             async: false,

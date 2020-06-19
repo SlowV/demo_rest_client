@@ -5,8 +5,8 @@ export class PersonService {
 
     private pr = new PersonRepository();
 
-    getAll(keyword?: string, page?: number, limit?: number): Person[] {
-        return this.pr.findAll(keyword, page, limit);
+    getAll(keyword?: string,status?: string, page?: number, limit?: number): Person[] {
+        return this.pr.findAll(keyword, status, page, limit);
     }
 
     getOne(id: number): Person {
