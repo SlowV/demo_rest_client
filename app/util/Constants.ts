@@ -1,9 +1,13 @@
 const BASE_URL = "http://localhost:1998/api_v1";
 
-export var ENDPOINT = {
+export const ENDPOINT = {
     person: {
         list: `${BASE_URL}/person`,
         findById: `${BASE_URL}/person/{**id}`
-    },
-    account: `${BASE_URL}/account`
-}
+    }
+};
+
+export const METHOD_HTTP = {
+    get: 'GET',
+    post: 'POST'
+};

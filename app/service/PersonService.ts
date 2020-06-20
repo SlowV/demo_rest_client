@@ -1,16 +1,33 @@
 import {Person} from "../domain/Person";
-import {PersonRepository} from "../repo/PersonRepository";
+import {Model} from "../repo/Model";
+import {ENDPOINT} from "../util/Constants";
+import {METHOD_HTTP} from "../util/Constants";
+import {Success} from "../domain/rest/Success";
+import {Task} from "../domain/Task";
 
 export class PersonService {
+    persons: Person[] = null;
 
-    private pr = new PersonRepository();
+    getAll(keyword: string = '', status?: string, page: number = 1, limit: number = 10): Person[] {
+        let url: string = ENDPOINT.person.list + `?page=${page}&limit=${limit}&keyword=${keyword}${status == null ? '' : `&status=${status}`}`;
 
-    getAll(keyword?: string,status?: string, page?: number, limit?: number): Person[] {
-        return this.pr.findAll(keyword, status, page, limit);
+        Model.callServer(url, METHOD_HTTP.get, false)
+            .done((res: Success) => {
+                this.setPersons(res.data as Person[]);
+            });
+        return this.persons;
     }
 
-    getOne(id: number): Person {
-        return this.pr.findOne(id);
+    setPersons(persons: Person[]) {
+        this.persons = persons;
     }
 
+    getTasksByPersonId(id: number): Task[] {
+        if (null != this.persons) {
+            this.persons.forEach((p) => {
+                if (p.id === id) return p.tasks;
+            })
+        }
+        return null;
+    }
 }

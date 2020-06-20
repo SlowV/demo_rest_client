@@ -1,12 +1,16 @@
+import {Task} from "./Task";
+
 export class Person {
     id: number;
     name: string;
     age: number;
     salary: number;
-    status: Status
+    status: Status;
     statusStr: string;
-    dob: string;
+    dob: any;
     salaryFormat: string;
+    dobFormat: string;
+    tasks: Task[]
 }
 
 export enum Status {
