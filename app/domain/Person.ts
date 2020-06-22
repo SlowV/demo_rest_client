@@ -10,6 +10,7 @@ export class Person {
     dob: any;
     salaryFormat: string;
     dobFormat: string;
+    isHasTask: boolean;
     tasks: Task[]
 }
 

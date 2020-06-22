@@ -2,12 +2,25 @@ const BASE_URL = "http://localhost:1998/api_v1";
 
 export const ENDPOINT = {
     person: {
-        list: `${BASE_URL}/person`,
-        findById: `${BASE_URL}/person/{**id}`
+        findAll: `${BASE_URL}/person`,
+        findOne: `${BASE_URL}/person/{**?}`
+    },
+    task: {
+        findByPersonId: `${BASE_URL}/task?personId={**?}`
     }
 };
 
 export const METHOD_HTTP = {
-    get: 'GET',
-    post: 'POST'
+    Get: 'GET',
+    Post: 'POST'
 };
+
+export enum LOAD_DATA_MODE {
+    Cache, Refresh
+}
+
+export enum HTTP_STATUS {
+    OK = 200,
+    NOT_FOUND = 404,
+    BAD_REQUEST = 400,
+}
