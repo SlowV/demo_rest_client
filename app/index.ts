@@ -3,7 +3,6 @@ import 'bootstrap';
 import {Person, Status} from './domain/Person';
 import {PersonService} from './service/PersonService';
 import {Task} from "./domain/Task";
-import {LOAD_DATA_MODE} from "./util/Constants";
 
 export class Index {
     private personService = new PersonService();
@@ -66,7 +65,7 @@ export class Index {
 
         rootPersonElm.on('click', '#btn-show-task', function () {
             $('#taskModal').modal('show');
-            let tasks = self.personService.getTasksByPersonId(Number($(this).attr('data-id')), LOAD_DATA_MODE.Refresh);
+            let tasks = self.personService.getTasksByPersonId(Number($(this).attr('data-id')));
             let rootElm = $('#listTask');
 
             if (tasks.length <= 0) {
@@ -99,20 +98,39 @@ export class Index {
             rootElm.html(content);
         });
 
-        rootPersonElm.on('click', '#btn-edit-person', function() {
+        rootPersonElm.on('click', '#btn-edit-person', function () {
             let personExist: Person = self.personService.getPerson(Number($(this).attr('data-id')));
             if (null != personExist) {
                 let formElm = $('#formEditPerson');
+                formElm.find('input[name="id"]').val(personExist.id);
                 formElm.find('input[name="name"]').val(personExist.name);
                 formElm.find('input[name="age"]').val(personExist.age);
                 formElm.find('input[name="salary"]').val(personExist.salary);
-                formElm.find('input[name="dob"]').val(personExist.dob);
+                let date = Index.convertMillisecondToInputDate(personExist.dob);
+                console.log(date);
+                formElm.find('input[name="dob"]').val(date);
                 let selectElm = formElm.find('select[name="status"]');
                 selectElm.val(personExist.status);
                 selectElm.prop('disabled', personExist.isHasTask);
                 $('#modalEditPerson').modal('show');
             }
+        });
 
+        $('#formEditPerson #btn-update').on('click', function () {
+            let formElm = $('#formEditPerson');
+            let person = new Person();
+            person.id = Number(formElm.find('input[name="id"]').val());
+            person.name = String(formElm.find('input[name="name"]').val());
+            person.age = Number(formElm.find('input[name="age"]').val());
+            person.dob = formElm.find('input[name="dob"]').val();
+            person.salary = Number(formElm.find('input[name="salary"]').val());
+            // @ts-ignore
+            person.status = formElm.find('select[name="status"] option:selected').val();
+            let personResult = self.personService.update(person);
+            if (personResult != null) {
+                self.bindData(self.personService.getAll());
+                $('#modalEditPerson').modal('hide');
+            }
         });
     }
 
@@ -132,8 +150,8 @@ export class Index {
     private static configUI(): void {
         $('[data-toggle="tooltip"]').tooltip();
 
-        $(`#listTask`).on('click', `#heading`, function() {
-            if ($(this).next('.collapse').hasClass('show')){
+        $(`#listTask`).on('click', `#heading`, function () {
+            if ($(this).next('.collapse').hasClass('show')) {
                 $(this).next('.collapse').toggleClass('show');
                 return;
             }
@@ -142,6 +160,10 @@ export class Index {
         });
     }
 
+    private static convertMillisecondToInputDate(value: number): string {
+        let date = new Date(value);
+        return `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-${date.getDate()}`;
+    }
 }
 
 $(document).ready(function () {

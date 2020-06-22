@@ -3,7 +3,8 @@ const BASE_URL = "http://localhost:1998/api_v1";
 export const ENDPOINT = {
     person: {
         findAll: `${BASE_URL}/person`,
-        findOne: `${BASE_URL}/person/{**?}`
+        findOne: `${BASE_URL}/person/{**?}`,
+        update: `${BASE_URL}/person/update`
     },
     task: {
         findByPersonId: `${BASE_URL}/task?personId={**?}`
@@ -12,7 +13,8 @@ export const ENDPOINT = {
 
 export const METHOD_HTTP = {
     Get: 'GET',
-    Post: 'POST'
+    Post: 'POST',
+    Put: 'PUT'
 };
 
 export enum LOAD_DATA_MODE {
