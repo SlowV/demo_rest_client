@@ -1,8 +1,9 @@
 import {Person} from "../domain/Person";
 import {Model} from "../model/Model";
 import {ENDPOINT, HTTP_STATUS, LOAD_DATA_MODE, METHOD_HTTP} from "../util/Constants";
-import {RESTResponse} from "../domain/rest/RESTResponse";
+import {Success} from "../domain/rest/Success";
 import {Task} from "../domain/Task";
+import {Error} from "../domain/rest/Error";
 
 export class PersonService {
     private persons: Person[] = null;
@@ -11,7 +12,7 @@ export class PersonService {
         let url: string = ENDPOINT.person.findAll + `?page=${page}&limit=${limit}&keyword=${keyword}${status == null ? '' : `&status=${status}`}`;
 
         Model.callServer(url, METHOD_HTTP.Get, false)
-            .done((res: RESTResponse) => {
+            .done((res: Success) => {
                 if (res.status === HTTP_STATUS.OK) {
                     this.setPersons(res.data as Person[]);
                 }
@@ -28,7 +29,7 @@ export class PersonService {
 
         if (this.persons == null || mode === LOAD_DATA_MODE.Refresh) {
             let url = ENDPOINT.task.findByPersonId.replace('{**?}', `${id}`);
-            Model.callServer(url, METHOD_HTTP.Get, false).done((res: RESTResponse) => {
+            Model.callServer(url, METHOD_HTTP.Get, false).done((res: Success) => {
                 tasks = res.data as Task[];
             });
         } else {
@@ -44,7 +45,7 @@ export class PersonService {
         if (mode === LOAD_DATA_MODE.Refresh) {
             let url = ENDPOINT.person.findOne.replace('{**?}', `${id}`);
             Model.callServer(url, METHOD_HTTP.Get, false)
-                .done((res: RESTResponse) => {
+                .done((res: Success) => {
                     if (res.status == HTTP_STATUS.OK) {
                         person = res.data as Person;
                     }
@@ -57,25 +58,29 @@ export class PersonService {
         return person;
     }
 
-    update(person: Person): Person {
-        let personResult: Person = null;
+    update(person: Person): any {
+        let result: Person | Error = null;
         Model.callServer(ENDPOINT.person.update, METHOD_HTTP.Put, false, person)
-            .done((res: RESTResponse) => {
+            .done((res: Success) => {
                 if (res.status == HTTP_STATUS.OK) {
-                    personResult = res.data as Person;
-                    this.updatePersonInList(personResult);
-                    console.log(personResult);
+                    // @ts-ignore
+                    result = new Person().newPerson(res.datas[0] as Person);
+                    this.updatePersonInList(result);
                 }
+            })
+            .fail((res) => {
+                let temp = res.responseJSON as Error;
+                result = new Error(temp.errors, temp.status, temp.message);
             });
-        return personResult;
+        return result;
     }
 
     private updatePersonInList(person: Person): void {
-       let index: number = this.persons.findIndex((p)=> p.id === person.id);
-       if(index === -1) {
-           this.persons.push(person);
-       } else {
-           this.persons[index] = person;
-       }
+        let index: number = this.persons.findIndex((p) => p.id === person.id);
+        if (index === -1) {
+            this.persons.push(person);
+        } else {
+            this.persons[index] = person;
+        }
     }
 }

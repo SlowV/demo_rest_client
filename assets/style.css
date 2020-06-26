@@ -18,7 +18,7 @@
     color: #ffab20;
 }
 
-.btn-transparent:hover i{
+.btn-transparent:hover i {
     opacity: 1;
 }
 
@@ -30,4 +30,23 @@
 #listTask .card-body {
     max-height: 400px;
     overflow-y: scroll;
+}
+
+.btn-add-task {
+    font-size: 13px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.btn-add-task i {
+    transition: .3s;
+}
+
+.btn-add-task:hover, .btn-add-task:hover i {
+    color: #3499ff;
+}
+
+.error {
+    font-style: italic;
+    font-size: 10px
 }
